@@ -1,0 +1,5 @@
+aws apigateway get-usage-plan --usage-plan-id y4l3p1 --query "apiStages" --output table
+aws apigateway get-usage-plan-keys --usage-plan-id y4l3p1 --query "items[*].[name,keyType,id]" --output table
+aws apigateway delete-usage-plan-key \
+  --usage-plan-id y4l3p1 \
+  --key-id qbzkrvnmak

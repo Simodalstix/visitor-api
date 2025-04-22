@@ -42,3 +42,15 @@ Resources:
     Properties:
       Name: VisitorApiKey
       Enabled: true
+
+  VisitorTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: VisitorCounter
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST

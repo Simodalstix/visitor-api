@@ -6,11 +6,11 @@ from datetime import datetime
 dynamodb = boto3.resource('dynamodb')
 table_name = os.environ.get('TABLE_NAME', 'VisitorCounter')
 table = dynamodb.Table(table_name)
-user_agent = event['headers'].get('User-Agent', 'unknown')
 
 def lambda_handler(event, context):
     try:
         # Increment the count
+        user_agent = event['headers'].get('User-Agent', 'unknown')
         response = table.update_item(
             Key={'id': 'visitor_count'},
             UpdateExpression='ADD #c :inc',
