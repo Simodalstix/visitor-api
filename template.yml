@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Visitor counter Lambda with DynamoDB + API key protection
+
+Globals:
+  Function:
+    Timeout: 5
+
+Resources:
+  VisitorApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: VisitorApi
+      StageName: Prod
+      Auth:
+        ApiKeyRequired: true
+
+  VisitorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: python3.11
+      Handler: app.lambda_handler
+      CodeUri: .
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: VisitorCounter
+      Environment:
+        Variables:
+          TABLE_NAME: VisitorCounter
+      Events:
+        VisitorApi:
+          Type: Api
+          Properties:
+            Path: /count
+            Method: GET
+            RestApiId: !Ref VisitorApi
+            Auth:
+              ApiKeyRequired: true
+
+  VisitorApiKey:
+    Type: AWS::ApiGateway::ApiKey
+    Properties:
+      Name: VisitorApiKey
+      Enabled: true
